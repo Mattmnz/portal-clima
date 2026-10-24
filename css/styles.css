@@ -70,7 +70,6 @@ body {
     line-height: 1.5;
     color: var(--tinta);
     background: var(--hoja);
-    font-variant-numeric: tabular-nums;
 }
 
 h1, h2, p, dl, dd, ol, ul {
@@ -848,5 +847,10 @@ td code {
     *::after {
         transition: none !important;
         animation: none !important;
-    }
+    }   
 }
+
+  td,
+  .grafico text {
+      font-variant-numeric: tabular-nums;
+  }
