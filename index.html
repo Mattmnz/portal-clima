@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cielo: el tiempo en cualquier ciudad</title>
+    <meta name="description" content="Consultá el tiempo actual, las próximas horas, la semana y la calidad del aire de cualquier ciudad. Datos de Open-Meteo.">
+    <meta name="theme-color" content="#8AB7DE" id="color-tema">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500&family=Schibsted+Grotesk:wght@400;500;600&display=swap">
+    <link rel="stylesheet" href="css/styles.css">
+
+    <!-- defer: el script se descarga en paralelo y se ejecuta cuando el HTML ya está parseado -->
+    <script src="js/app.js" defer></script>
+</head>
+<body>
+
+    <!-- Banda superior: su color es el del cielo real en la ciudad consultada -->
+    <header class="cielo" id="cielo" data-fondo="claro">
+        <div class="cielo__barra">
+            <a class="marca" href="./">Cielo</a>
+
+            <form class="buscador" id="buscador" role="search" autocomplete="off">
+                <label for="campo-busqueda" class="solo-lectores">Buscar ciudad</label>
+                <input id="campo-busqueda" class="buscador__campo" type="search"
+                    placeholder="Buscar ciudad"
+                    role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="sugerencias">
+                <ul id="sugerencias" class="sugerencias" role="listbox" aria-label="Ciudades encontradas" hidden></ul>
+            </form>
+
+            <button id="btn-ubicacion" class="boton-icono" type="button" aria-label="Usar mi ubicación" title="Usar mi ubicación">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.5"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3"/><circle cx="12" cy="12" r="7.5"/></svg>
+            </button>
+
+            <div class="unidades" id="unidades" role="group" aria-label="Unidad de temperatura">
+                <button type="button" data-unidad="c" aria-pressed="true">°C</button>
+                <button type="button" data-unidad="f" aria-pressed="false">°F</button>
+            </div>
+        </div>
+
+        <div class="boletin" id="boletin" aria-live="polite" aria-busy="true">
+            <p class="boletin__lugar" id="lugar">Consultando el tiempo…</p>
+            <h1 class="boletin__titular" id="titular"><span class="esqueleto esqueleto--titular"></span></h1>
+            <p class="boletin__detalle" id="detalle"></p>
+            <dl class="boletin__datos" id="datos"></dl>
+        </div>
+
+        <nav class="recientes" aria-label="Ciudades consultadas">
+            <ul id="recientes"></ul>
+        </nav>
+    </header>
+
+    <main class="hoja" id="hoja">
+
+        <section class="bloque bloque--horas" aria-labelledby="t-horas">
+            <div class="bloque__cabeza">
+                <h2 id="t-horas">Próximas 24 horas</h2>
+                <p class="lectura" id="lectura" aria-live="polite"></p>
+            </div>
+            <div class="grafico" id="grafico" tabindex="0"
+                aria-label="Temperatura y probabilidad de lluvia por hora. Usá las flechas izquierda y derecha para recorrer las horas."
+                aria-describedby="lectura"></div>
+        </section>
+
+        <section class="bloque bloque--semana" aria-labelledby="t-semana">
+            <h2 id="t-semana">Próximos 7 días</h2>
+            <p class="nota">Elegí un día para ver su detalle por hora.</p>
+            <ol class="semana" id="semana"></ol>
+        </section>
+
+        <section class="bloque bloque--aire" aria-labelledby="t-aire">
+            <h2 id="t-aire">Calidad del aire</h2>
+            <div id="aire"></div>
+        </section>
+
+        <section class="bloque bloque--registro" aria-labelledby="t-registro">
+            <details class="registro" id="registro">
+                <summary>
+                    <h2 id="t-registro">Registro de peticiones</h2>
+                    <span class="registro__contador" id="contador">0</span>
+                </summary>
+                <p class="nota">
+                    Cada llamada a la API queda anotada con su estado HTTP, su duración total
+                    (cabeceras más cuerpo) y la sintaxis con la que se hizo. Elegí un servicio
+                    para ver la respuesta JSON completa.
+                </p>
+                <div class="tabla-desplazable">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th scope="col">Hora</th>
+                                <th scope="col">Servicio</th>
+                                <th scope="col">Estado</th>
+                                <th scope="col">Duración</th>
+                                <th scope="col">Sintaxis</th>
+                            </tr>
+                        </thead>
+                        <tbody id="filas"></tbody>
+                    </table>
+                </div>
+                <p class="registro__url" id="json-url"></p>
+                <pre class="registro__json" id="json" tabindex="0"></pre>
+            </details>
+        </section>
+
+    </main>
+
+    <footer class="pie">
+        <p>
+            Datos meteorológicos de <a href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer">Open-Meteo</a> (CC BY 4.0).
+            Calidad del aire: Copernicus Atmosphere Monitoring Service (CAMS). Ubicaciones: GeoNames.
+        </p>
+        <p>Diseño de Sistemas de Internet, Universidad Nacional de Ingeniería. Matthew Muñoz, 2026.</p>
+    </footer>
+
+    <div class="aviso" id="aviso" role="alert" hidden></div>
+
+</body>
+</html>
